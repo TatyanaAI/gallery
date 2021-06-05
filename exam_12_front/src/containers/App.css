@@ -1,0 +1,23 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  outline: 0;
+}
+
+body{
+  height: auto;
+  background-color:whitesmoke;
+}
+
+.App {
+  text-align: center;
+  background-color:whitesmoke;
+}
+
+a{
+  color: blue;
+}
+a:hover{
+  color: grey;
+}
