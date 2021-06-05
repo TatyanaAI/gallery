@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import { GridList, GridListTile, GridListTileBar, Button } from "@material-ui/core";
+import { GridList, GridListTile, GridListTileBar} from "@material-ui/core";
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { photosRequest } from "../../store/actions/photosActions";
 import BackDrop from '../../components/UI/BackDrop/backDrop'
+import PhotoModal from "../../components/UI/PhotoModal/photoModal"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,51 +19,14 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     position: "relative"
   },
-  publishingStatus: {
-    position: "absolute",
-    bottom: "13%",
-    right: "-9%",
-    backgroundColor: "darkred",
-    color: "white",
-    width: "300px",
-    height: "25px",
-    borderRadius: 5,
-    textTransform: "uppercase",
-    fontWeight: "700",
-    fontSize: 13,
-    transform: "rotate(-30deg)",
+  image: {
+    width: "100%",
+    height: "100%",
+    cursor: "pointer"
   },
-  publishButton: {
-    position: "absolute",
-    top: "2%",
-    left: "25%",
-    width: "100px",
-    height: "30px",
-    backgroundColor: "green",
-    borderRadius: "10px",
-    color: "white",
-    fontWeight: "600",
-    "&:hover": {
-      backgroundColor: "lightgreen",
-      color: "grey"
-    }
-  },
-  deleteButton: {
-    position: "absolute",
-    top: "2%",
-    left: "1%",
-    width: "100px",
-    height: "30px",
-    backgroundColor: "red",
-    borderRadius: "10px",
-    color: "white",
-    fontWeight: "600",
-    "&:hover": {
-      backgroundColor: "tomato",
-      color: "lightgrey"
-    }
+  user: {
+    color: "white"
   }
-
 }));
 
 const Photos = () => {
@@ -71,9 +35,23 @@ const Photos = () => {
   const loading = useSelector(state => state.photos.loading);
   const error = useSelector(state => state.photos.error);
 
+  const [modal, setModal] = React.useState({
+    open: false,
+    photo: null
+  });
+
   useEffect(() => {
     dispatch(photosRequest());
   }, []);
+
+  const handleOpen = (event, photo) => {
+    event.stopPropagation();
+    setModal({ ...modal, open: true, photo });
+  };
+
+  const handleClose = () => {
+    setModal({ ...modal, open: false, photo: null });
+  };
 
   const classes = useStyles();
   return (
@@ -83,15 +61,22 @@ const Photos = () => {
         {photos.map((tile) => (
           <GridListTile key={tile.id} >
             <div>
-              <img src={tile.image} alt={tile.title} />
+              <img src={tile.image} alt={tile.title} onClick={(event) => handleOpen(event, tile)} className={classes.image} />
               <GridListTileBar
                 title={tile.title}
-                subtitle={<>By: <Link to={"/users/" + tile.user.id} >{tile.user.username}</Link></>}
+                subtitle={<>By: <Link to={"/users/" + tile.user.id} className={classes.user} >{tile.user.username}</Link></>}
               />
             </div>
           </GridListTile>
         ))}
       </GridList>
+
+      <PhotoModal
+        photo={modal.photo}
+        open={modal.open}
+        handleClose={handleClose}
+      />
+
     </div>
 
   );
