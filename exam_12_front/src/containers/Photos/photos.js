@@ -3,9 +3,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import { GridList, GridListTile, GridListTileBar } from "@material-ui/core";
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import Alert from '@material-ui/lab/Alert';
 import { photosRequest, initPhotos } from "../../store/actions/photosActions";
-import BackDrop from '../../components/UI/BackDrop/backDrop'
-import PhotoModal from "../../components/UI/PhotoModal/photoModal"
+import BackDrop from '../../components/UI/BackDrop/backDrop';
+import PhotoModal from "../../components/UI/PhotoModal/photoModal";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,6 +60,7 @@ const Photos = () => {
   return (
     <div className={classes.root}>
       <BackDrop loading={loading} />
+      { (error) && <Alert severity="error" className={classes.alert}> {(error)} </Alert>}
       <GridList cellHeight={300} className={classes.gridList} cols={3} error={error} >
         {photos.map((tile) => (
           <GridListTile key={tile.id} >

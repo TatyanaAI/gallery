@@ -26,7 +26,7 @@ export const registerUser = user => {
       dispatch(push('/'));
     } catch (error) {
       if (error.response && error.response.data) {
-        dispatch(registerUserFailure(error.response.data.error));
+        dispatch(registerUserFailure(error.response.data.error || error.response.data.message));
       } else {
         dispatch(registerUserFailure(error.message));
       }
@@ -42,7 +42,7 @@ export const loginUser = user => {
         dispatch(push('/'));
       },
       error => {
-        dispatch(loginUserFailure(error.response.data));
+        dispatch(loginUserFailure(error.response.data.error || error.response.data.message));
       }
     );
   };

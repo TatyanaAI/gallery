@@ -38,7 +38,14 @@ const createRouter = () => {
       }
 
       let photos = await Photo.find({ "user": user }).populate("user", '-token');
-      res.send(photos);
+      const result = {
+        photos: photos,
+        user: {
+          id: user._id,
+          username: user.username
+        }
+      }
+      res.send(result);
     } catch (e) {
       console.error(e.message)
       res.sendStatus(500).send(e);

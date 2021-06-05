@@ -1,13 +1,15 @@
 import {
     GET_PHOTOS_REQUEST, GET_PHOTOS_SUCCESS, GET_PHOTOS_FAILURE,
     GET_USER_PHOTOS_REQUEST, GET_USER_PHOTOS_SUCCESS, GET_USER_PHOTOS_FAILURE, INIT_PHOTOS,
-    DELETE_PHOTO_REQUEST, DELETE_PHOTO_SUCCESS, DELETE_PHOTO_FAILURE
+    DELETE_PHOTO_REQUEST, DELETE_PHOTO_SUCCESS, DELETE_PHOTO_FAILURE,
+    ADD_PHOTO_REQUEST, ADD_PHOTO_FAILURE
 } from "../actionTypes";
 
 const initialState = {
     loading: false,
     error: null,
-    photos: []
+    photos: [],
+    user: null
 };
 
 const photosReducer = (state = initialState, action) => {
@@ -15,13 +17,16 @@ const photosReducer = (state = initialState, action) => {
         case GET_PHOTOS_REQUEST:
         case GET_USER_PHOTOS_REQUEST:
         case DELETE_PHOTO_REQUEST:
+        case ADD_PHOTO_REQUEST:
             return { ...state, loading: true };
         case GET_PHOTOS_SUCCESS:
-        case GET_USER_PHOTOS_SUCCESS:
             return { ...state, loading: false, error: null, photos: action.photos };
+        case GET_USER_PHOTOS_SUCCESS:
+            return { ...state, loading: false, error: null, photos: action.photos, user: action.user };
         case GET_PHOTOS_FAILURE:
         case GET_USER_PHOTOS_FAILURE:
         case DELETE_PHOTO_FAILURE:
+        case ADD_PHOTO_FAILURE:
             return { ...state, loading: false, error: action.error };
         case INIT_PHOTOS:
             return { ...initialState };

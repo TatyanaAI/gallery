@@ -3,10 +3,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import { GridList, GridListTile, GridListTileBar, Typography, Button } from "@material-ui/core";
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { userPhotosRequest, initPhotos, deletePhoto } from "../../store/actions/photosActions";
-import BackDrop from '../../components/UI/BackDrop/backDrop'
-import PhotoModal from "../../components/UI/PhotoModal/photoModal"
 import DeleteOutlineRoundedIcon from '@material-ui/icons/DeleteOutlineRounded';
+import Alert from '@material-ui/lab/Alert';
+import { userPhotosRequest, initPhotos, deletePhoto } from "../../store/actions/photosActions";
+import BackDrop from '../../components/UI/BackDrop/backDrop';
+import PhotoModal from "../../components/UI/PhotoModal/photoModal";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,6 +50,7 @@ const UserPhotos = (props) => {
 
   const dispatch = useDispatch();
   const photos = useSelector(state => state.photos.photos);
+  const author = useSelector(state => state.photos.user);
   const loading = useSelector(state => state.photos.loading);
   const error = useSelector(state => state.photos.error);
   const { user } = useSelector(state => state.users);
@@ -61,7 +63,7 @@ const UserPhotos = (props) => {
   useEffect(() => {
     dispatch(initPhotos());
     dispatch(userPhotosRequest(userId));
-  }, []);
+  }, [userId]);
 
   const handleOpen = (event, photo) => {
     event.stopPropagation();
@@ -81,7 +83,8 @@ const UserPhotos = (props) => {
   return (
     <div className={classes.root}>
       <BackDrop loading={loading} />
-      <Typography variant="h3" style={{ marginTop: "30px", marginBottom: "30px" }}><b>Gallery of {photos[0] && photos[0].user.username}</b></Typography>
+      { (error) && <Alert severity="error" className={classes.alert}> {(error)} </Alert>}
+      <Typography variant="h3" style={{ marginTop: "30px", marginBottom: "30px" }}><b>Gallery of {author && author.username}</b></Typography>
       <div>{user && user._id === userId && <Button variant="contained" color="primary" component={Link} to="/add_photo">Add new photo</Button>}</div>
       <GridList cellHeight={300} className={classes.gridList} cols={3} error={error} >
         {photos.map((tile) => (

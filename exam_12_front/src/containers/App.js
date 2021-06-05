@@ -5,6 +5,7 @@ import Registration from "../containers/Registration/registration";
 import Login from "../containers/Login/login";
 import Photos from "../containers/Photos/photos";
 import UserPhotos from "../containers/UserPhotos/userPhotos";
+import AddPhotoForm from "../containers/AddPhotoForm/addPhotoForm";
 import Layout from '../components/UI/Layout/layout';
 import './App.css';
 
@@ -24,13 +25,11 @@ function App(props) {
         <Switch>
           <Route path="/" exact component={props => <Photos {...props} />} />
           <Route path="/users/:id" exact component={props => <UserPhotos {...props} />} />
-          {/* 
           <ProtectedRoute
-           isAllowed={user !== null}
-           redirectTo={"/login"}
-           path="/add_photo" 
-           exact component={AddPhotoForm} /> */}
-
+            isAllowed={user !== null}
+            redirectTo={"/login"}
+            path="/add_photo"
+            exact component={AddPhotoForm} />
           <ProtectedRoute
             isAllowed={!user}
             redirectTo={"/"}

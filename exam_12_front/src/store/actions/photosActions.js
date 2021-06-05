@@ -1,7 +1,8 @@
 import {
   GET_PHOTOS_REQUEST, GET_PHOTOS_SUCCESS, GET_PHOTOS_FAILURE,
   GET_USER_PHOTOS_REQUEST, GET_USER_PHOTOS_SUCCESS, GET_USER_PHOTOS_FAILURE, INIT_PHOTOS,
-  DELETE_PHOTO_REQUEST, DELETE_PHOTO_SUCCESS, DELETE_PHOTO_FAILURE
+  DELETE_PHOTO_REQUEST, DELETE_PHOTO_SUCCESS, DELETE_PHOTO_FAILURE,
+  ADD_PHOTO_REQUEST, ADD_PHOTO_FAILURE
 } from "../actionTypes";
 import axios from 'axios';
 import { push } from 'connected-react-router';
@@ -22,8 +23,8 @@ const getUserPhotosRequest = () => {
   return { type: GET_USER_PHOTOS_REQUEST };
 };
 
-const getUserPhotosSuccess = (photos) => {
-  return { type: GET_USER_PHOTOS_SUCCESS, photos };
+const getUserPhotosSuccess = (photos, user) => {
+  return { type: GET_USER_PHOTOS_SUCCESS, photos, user };
 };
 
 const getUserPhotosFailure = error => {
@@ -46,6 +47,14 @@ const deletePhotoFailure = error => {
   return { type: DELETE_PHOTO_FAILURE, error };
 };
 
+const addPhotoRequest = () => {
+  return { type: ADD_PHOTO_REQUEST };
+};
+
+const addPhotoFailure = error => {
+  return { type: ADD_PHOTO_FAILURE, error };
+};
+
 export const photosRequest = () => {
   return async dispatch => {
     try {
@@ -66,7 +75,7 @@ export const photosRequest = () => {
       dispatch(getPhotosSuccess(photos));
     } catch (error) {
       if (error.response && error.response.data) {
-        dispatch(getPhotosFailure(error.response.data.error));
+        dispatch(getPhotosFailure(error.response.data.error || error.response.data.message));
       } else {
         dispatch(getPhotosFailure(error.message));
       }
@@ -79,7 +88,7 @@ export const userPhotosRequest = userId => {
     try {
       dispatch(getUserPhotosRequest())
       const response = await axios.get("/photos/" + userId);
-      const photos = response.data.map(photo => {
+      const photos = response.data.photos.map(photo => {
         return {
           key: photo._id,
           id: photo._id,
@@ -91,10 +100,10 @@ export const userPhotosRequest = userId => {
           }
         }
       });
-      dispatch(getUserPhotosSuccess(photos));
+      dispatch(getUserPhotosSuccess(photos, response.data.user));
     } catch (error) {
       if (error.response && error.response.data) {
-        dispatch(getUserPhotosFailure(error.response.data.error));
+        dispatch(getUserPhotosFailure(error.response.data.error || error.response.data.message));
       } else {
         dispatch(getUserPhotosFailure(error.message));
       }
@@ -110,9 +119,25 @@ export const deletePhoto = (photoId) => {
       dispatch(deletePhotoSuccess(photoId));
     } catch (error) {
       if (error.response && error.response.data) {
-        dispatch(deletePhotoFailure(error.response.data.error));
+        dispatch(deletePhotoFailure(error.response.data.error || error.response.data.message));
       } else {
         dispatch(deletePhotoFailure(error.message));
+      }
+    }
+  };
+};
+
+export const addPhoto = photo => {
+  return async dispatch => {
+    try {
+      dispatch(addPhotoRequest());
+      await axios.post("/photos", photo);
+      dispatch(push('/'));
+    } catch (error) {
+      if (error.response && error.response.data) {
+        dispatch(addPhotoFailure(error.response.data.error || error.response.data.message));
+      } else {
+        dispatch(addPhotoFailure(error.message));
       }
     }
   };
