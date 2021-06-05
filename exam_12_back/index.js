@@ -3,6 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 const users = require("./app/users");
+const photos = require("./app/photos");
 
 const app = express();
 const port = 8000;
@@ -15,6 +16,7 @@ const run = async () => {
   app.use(express.json());
 
   app.use("/users", users());
+  app.use("/photos", photos());
 
   app.listen(port, () => {
     console.log("Server started at http://localhost:" + port);
