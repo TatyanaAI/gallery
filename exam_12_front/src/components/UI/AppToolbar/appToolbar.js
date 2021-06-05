@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { AppBar, Grid, Toolbar, Typography } from "@material-ui/core";
-import LibraryMusicSharpIcon from '@material-ui/icons/LibraryMusicSharp';
+import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
 import React from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import AnonymousMenu from "../../UI/AppToolbar/Menus/anonymousMenu";
@@ -60,7 +60,7 @@ const AppToolbar = (props) => {
         <Toolbar>
           <Grid container item justify="flex-start" alignItems="center" >
             <Link to={'/'} className={classes.appLink} >
-              <LibraryMusicSharpIcon className={classes.logo} />
+              <PhotoCameraIcon className={classes.logo} />
             </Link>
             <Typography variant="h4">
               <Link to={'/'} className={classes.appLink} >Gallery App</Link>

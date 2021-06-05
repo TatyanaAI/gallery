@@ -5,13 +5,14 @@ import thunkMiddleware from "redux-thunk";
 import { loadFromLocalStorage, saveToLocalStorage } from "./localStorage";
 import axios from 'axios';
 import usersReducer from "./reducers/usersReducer";
-
+import photosReducer from "./reducers/photosReducer";
 
 export const history = createBrowserHistory();
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const rootReducer = combineReducers({
   users: usersReducer,
+  photos: photosReducer,
   router: connectRouter(history)
 });
 const middleware = [

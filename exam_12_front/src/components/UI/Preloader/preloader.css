@@ -1,0 +1,10 @@
+.Preloader {
+    position:absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: url('../../../assets/images/preloader.gif') 50% 50% no-repeat;
+    z-index:100;
+    opacity: 0.5;
+}
