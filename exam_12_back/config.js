@@ -8,5 +8,9 @@ module.exports = {
   db: {
     name: "galleryApp",
     url: "mongodb://localhost"
+  },
+  fb: {
+    appId: "514789883303531",
+    appSecret: "cea8122f0c929681843d19d75b4e5f35"
   }
 };

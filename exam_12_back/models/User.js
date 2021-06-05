@@ -19,7 +19,8 @@ const UserSchema = new Schema({
   token: {
     type: String,
     required: true
-  }
+  },
+  facebookId: String
 });
 
 

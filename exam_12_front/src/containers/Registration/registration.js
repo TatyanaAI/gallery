@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Container, Typography, Grid, Button, Link } from "@material-ui/core";
 import { Link as RouterLink } from 'react-router-dom';
 import FormElement from '../../components/UI/Form/formElement'
-
+import FacebookLogin from "../../components/FacebookLogin/facebookLogin";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -93,6 +93,10 @@ const Registration = () => {
                     >
                         Sign Up
               </Button>
+
+                    <FacebookLogin />
+
+
                     <Grid container justify="flex-end">
                         <Grid item>
                             <Link component={RouterLink} variant="body2" to="/login">
