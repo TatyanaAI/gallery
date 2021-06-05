@@ -1,8 +1,10 @@
 import {
   GET_PHOTOS_REQUEST, GET_PHOTOS_SUCCESS, GET_PHOTOS_FAILURE,
-  GET_USER_PHOTOS_REQUEST, GET_USER_PHOTOS_SUCCESS, GET_USER_PHOTOS_FAILURE, INIT_PHOTOS
+  GET_USER_PHOTOS_REQUEST, GET_USER_PHOTOS_SUCCESS, GET_USER_PHOTOS_FAILURE, INIT_PHOTOS,
+  DELETE_PHOTO_REQUEST, DELETE_PHOTO_SUCCESS, DELETE_PHOTO_FAILURE
 } from "../actionTypes";
 import axios from 'axios';
+import { push } from 'connected-react-router';
 
 const getPhotosRequest = () => {
   return { type: GET_PHOTOS_REQUEST };
@@ -30,6 +32,18 @@ const getUserPhotosFailure = error => {
 
 export const initPhotos = () => {
   return { type: INIT_PHOTOS };
+};
+
+const deletePhotoRequest = () => {
+  return { type: DELETE_PHOTO_REQUEST };
+};
+
+const deletePhotoSuccess = id => {
+  return { type: DELETE_PHOTO_SUCCESS, id };
+};
+
+const deletePhotoFailure = error => {
+  return { type: DELETE_PHOTO_FAILURE, error };
 };
 
 export const photosRequest = () => {
@@ -83,6 +97,22 @@ export const userPhotosRequest = userId => {
         dispatch(getUserPhotosFailure(error.response.data.error));
       } else {
         dispatch(getUserPhotosFailure(error.message));
+      }
+    }
+  };
+};
+
+export const deletePhoto = (photoId) => {
+  return async dispatch => {
+    try {
+      dispatch(deletePhotoRequest());
+      await axios.delete("/photos/" + photoId);
+      dispatch(deletePhotoSuccess(photoId));
+    } catch (error) {
+      if (error.response && error.response.data) {
+        dispatch(deletePhotoFailure(error.response.data.error));
+      } else {
+        dispatch(deletePhotoFailure(error.message));
       }
     }
   };
