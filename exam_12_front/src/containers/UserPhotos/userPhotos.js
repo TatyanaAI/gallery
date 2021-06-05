@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import { GridList, GridListTile, GridListTileBar } from "@material-ui/core";
+import { GridList, GridListTile, GridListTileBar, Typography } from "@material-ui/core";
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { photosRequest, initPhotos } from "../../store/actions/photosActions";
+import { userPhotosRequest, initPhotos } from "../../store/actions/photosActions";
 import BackDrop from '../../components/UI/BackDrop/backDrop'
 import PhotoModal from "../../components/UI/PhotoModal/photoModal"
 
@@ -29,7 +29,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Photos = () => {
+const UserPhotos = (props) => {
+  const id = props.match.params.id;
+
   const dispatch = useDispatch();
   const photos = useSelector(state => state.photos.photos);
   const loading = useSelector(state => state.photos.loading);
@@ -42,7 +44,7 @@ const Photos = () => {
 
   useEffect(() => {
     dispatch(initPhotos());
-    dispatch(photosRequest());
+    dispatch(userPhotosRequest(id));
   }, []);
 
   const handleOpen = (event, photo) => {
@@ -58,6 +60,8 @@ const Photos = () => {
   return (
     <div className={classes.root}>
       <BackDrop loading={loading} />
+      <Typography component="h1" variant="h3" style={{ marginTop: "30px", marginBottom: "30px" }}><b>Gallery of {photos[0] && photos[0].user.username}</b></Typography>
+
       <GridList cellHeight={300} className={classes.gridList} cols={3} error={error} >
         {photos.map((tile) => (
           <GridListTile key={tile.id} >
@@ -65,7 +69,6 @@ const Photos = () => {
               <img src={tile.image} alt={tile.title} onClick={(event) => handleOpen(event, tile)} className={classes.image} />
               <GridListTileBar
                 title={tile.title}
-                subtitle={<>By: <Link to={"/users/" + tile.user.id} className={classes.user} >{tile.user.username}</Link></>}
               />
             </div>
           </GridListTile>
@@ -83,4 +86,4 @@ const Photos = () => {
   );
 };
 
-export default Photos;
+export default UserPhotos;

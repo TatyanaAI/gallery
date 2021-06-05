@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import Registration from "../containers/Registration/registration";
 import Login from "../containers/Login/login";
 import Photos from "../containers/Photos/photos";
+import UserPhotos from "../containers/UserPhotos/userPhotos";
 import Layout from '../components/UI/Layout/layout';
 import './App.css';
 
@@ -22,8 +23,8 @@ function App(props) {
       <Layout>
         <Switch>
           <Route path="/" exact component={props => <Photos {...props} />} />
-          {/* 
           <Route path="/users/:id" exact component={props => <UserPhotos {...props} />} />
+          {/* 
           <ProtectedRoute
            isAllowed={user !== null}
            redirectTo={"/login"}
